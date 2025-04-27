@@ -14,9 +14,10 @@ variable "key_vault_name" {
   type        = string
 }
 
-variable "key_vault_resource_group" {
-  description = "The resource group containing the Key Vault"
-  type        = string
+variable "Anchor_resource" {
+  description = "Pre-req resources in azure"
+  type = string
+  
 }
 
 variable "dns_zone_name" {
@@ -24,10 +25,7 @@ variable "dns_zone_name" {
   type        = string
 }
 
-variable "dns_zone_resource_group" {
-  description = "The resource group containing the DNS Zone"
-  type        = string
-}
+
 
 variable "tags" {
   description = "A map of tags to assign to all resources"

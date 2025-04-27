@@ -6,7 +6,10 @@ terraform {
     }
   }
   backend "azurerm" {
-    # Configure your backend settings here
+    resource_group_name = "Anchor-Resources"
+    storage_account_name = "rs8d892ka"
+    container_name = "tfstate"
+    key = "cosmos-visitor-counter.tfstate"
   }
 }
 

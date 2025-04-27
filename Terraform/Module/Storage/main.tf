@@ -21,9 +21,9 @@ resource "azurerm_storage_account" "storage" {
   enable_https_traffic_only       = var.enable_https_traffic_only
   min_tls_version                = var.min_tls_version
   blob_properties {
-    versioning_enabled       = true
-    last_access_time_enabled = true
-    change_feed_enabled      = true
+    versioning_enabled       = false
+    last_access_time_enabled = false
+    change_feed_enabled      = false
   }
   tags = local.merged_tags
 }

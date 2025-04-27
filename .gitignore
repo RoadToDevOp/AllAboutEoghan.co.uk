@@ -44,3 +44,8 @@ local_settings.py
 # Azure Functions
 local.settings.json
 .python_packages/ 
+
+#terraform
+
+.terraform
+.tfvars
