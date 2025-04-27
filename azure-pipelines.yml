@@ -11,7 +11,7 @@ pool:
 variables:
   bkstoragerg:
   bkstorage:
-  bkcontainer: 'tfstate'
+  bkcontainer: 
   bkstoragekey:
 
 stages:
