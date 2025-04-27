@@ -35,14 +35,14 @@ resource "azurerm_cosmosdb_account" "cosmos_db_account" {
 resource "azurerm_cosmosdb_sql_database" "cosmosdb_sql_database" {
   name                = var.database_name
   resource_group_name = var.resource_group_name
-  account_name        = azurerm_cosmosdb_account.this.name
+  account_name        = azurerm_cosmosdb_account.cosmos_db_account.name
 }
 
 resource "azurerm_cosmosdb_sql_container" "cosmosdb_sql_container" {
   name                = var.container_name
   resource_group_name = var.resource_group_name
-  account_name        = azurerm_cosmosdb_account.this.name
-  database_name       = azurerm_cosmosdb_sql_database.this.name
+  account_name        = azurerm_cosmosdb_account.cosmos_db_account.name
+  database_name       = azurerm_cosmosdb_sql_database.cosmosdb_sql_database.name
   partition_key_paths = "/id"
 
   indexing_policy {

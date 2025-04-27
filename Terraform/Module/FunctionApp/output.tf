@@ -29,4 +29,14 @@ output "function_app_url" {
   value       = "https://${azurerm_windows_function_app.function_app.default_hostname}"
 }
 
+output "function_app_id" {
+  value = azurerm_windows_function_app.function_app.id
+}
 
+output "identity_principal_id" {
+  value = azurerm_windows_function_app.function_app.identity[0].principal_id
+}
+
+output "identity_tenant_id" {
+  value = azurerm_windows_function_app.function_app.identity[0].tenant_id
+}

@@ -29,8 +29,13 @@ resource "azurerm_windows_function_app" "function_app" {
   storage_account_access_key = azurerm_storage_account.function_storage.primary_access_key
   service_plan_id            = azurerm_service_plan.function_plan.id
   
+  identity {
+    type = "SystemAssigned"
+  }
+
   site_config {
     application_stack {
+      
     }
     cors {
       allowed_origins = var.cors_allowed_origins

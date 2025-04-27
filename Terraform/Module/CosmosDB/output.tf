@@ -23,4 +23,17 @@ output "cosmosdb_account_id" {
   value       = azurerm_cosmosdb_account.this.id
 }
 
+output "cosmos_db_connection_string" {
+  value = azurerm_cosmosdb_account.cosmos_db_account.connection_strings[0]
+  sensitive = true
+}
+
+output "database_name" {
+  value = azurerm_cosmosdb_sql_database.cosmosdb_sql_database.name
+}
+
+output "container_name" {
+  value = azurerm_cosmosdb_sql_container.cosmosdb_sql_container.name
+}
+
 
