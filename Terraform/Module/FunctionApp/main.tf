@@ -25,8 +25,8 @@ resource "azurerm_windows_function_app" "function_app" {
   name                       = var.function_app_name
   resource_group_name        = var.resource_group_name
   location                   = var.location
-  storage_account_name       = var.storage_account_name
-  storage_account_access_key = var.storage_account_access_key
+  storage_account_name       = azurerm_storage_account.function_storage.name
+  storage_account_access_key = azurerm_storage_account.function_storage.primary_access_key
   service_plan_id            = azurerm_service_plan.function_plan.id
   
   site_config {
@@ -58,11 +58,17 @@ resource "azurerm_application_insights" "function_insights" {
   tags                = local.merged_tags
 }
 
-
+resource "random_string" "storage_account_name" {
+  length = 16
+  numeric = true
+  special = false
+  upper = false
+  
+}
 
 # Storage Account for Function App
 resource "azurerm_storage_account" "function_storage" {
-  name                     = var.storage_account_name
+  name                     = random_string.storage_account_name.result
   resource_group_name      = var.resource_group_name
   location                 = var.location
   account_tier             = "Standard"
