@@ -1,0 +1,103 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  bkstoragerg:
+  bkstorage:
+  bkcontainer: 'tfstate'
+  bkstoragekey:
+
+stages:
+  - stage: tfvalidate
+    jobs:
+      - job: validate
+        continueOnError: false
+        steps:
+        - task: TerraformInstaller@1
+          displayName: tfinstall
+          inputs:
+            terraformVersion: 'latest'
+        - task: TerraformTask@5
+          displayName: init
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            backendServiceArm: 'Azure-Portal-Connection'
+            backendAzureRmResourceGroupName: '$(bkstoragerg)'
+            backendAzureRmStorageAccountName: '$(bkstorage)'
+            backendAzureRmContainerName: '$(bkcontainer)'
+            backendAzureRmKey: '$(bkstoragekey)'
+        - task: TerraformTask@5
+          displayName: validate
+          inputs:
+            provider: 'azurerm'
+            command: 'validate'
+            
+  - stage: tfplan
+    condition: succeeded('tfvalidate')
+    dependsOn: tfvalidate
+    jobs:
+      - job: plan
+        steps:
+          - task: TerraformInstaller@1
+            displayName: tfinstall
+            inputs:
+              terraformVersion: 'latest'
+            
+          - task: TerraformTask@5
+            displayName: init
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'Azure-Portal-Connection'
+              backendAzureRmResourceGroupName: '$(bkstoragerg)'
+              backendAzureRmStorageAccountName: '$(bkstorage)'
+              backendAzureRmContainerName: '$(bkcontainer)'
+              backendAzureRmKey: '$(bkstoragekey)'
+              
+          - task: TerraformTask@5
+            displayName: plan
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              environmentServiceNameAzureRM: 'Azure-Portal-Connection'
+              
+  - stage: tfapply
+    condition: succeeded('tfplan')
+    dependsOn: tfplan
+    jobs:
+      - deployment: ApplyTerraform
+        environment: 'ALL-ABOUT-EOGHAN'  # This environment needs to be created with approvals
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: TerraformInstaller@1
+                  displayName: tfinstall
+                  inputs:
+                    terraformVersion: 'latest'
+                
+                - task: TerraformTask@5
+                  displayName: init
+                  inputs:
+                    provider: 'azurerm'
+                    command: 'init'
+                    backendServiceArm: 'Azure-Portal-Connection'
+                    backendAzureRmResourceGroupName: '$(bkstoragerg)'
+                    backendAzureRmStorageAccountName: '$(bkstorage)'
+                    backendAzureRmContainerName: '$(bkcontainer)'
+                    backendAzureRmKey: '$(bkstoragekey)'
+                    
+                - task: TerraformTask@5
+                  displayName: Apply
+                  inputs:
+                    provider: 'azurerm'
+                    command: 'apply'
+                    environmentServiceNameAzureRM: 'Azure-Portal-Connection'
