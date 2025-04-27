@@ -31,12 +31,6 @@ variable "account_kind" {
   default     = "StorageV2"
 }
 
-variable "enable_https_traffic_only" {
-  description = "Boolean flag which forces HTTPS if enabled."
-  type        = bool
-  default     = true
-}
-
 variable "min_tls_version" {
   description = "The minimum supported TLS version for the storage account."
   type        = string
@@ -88,4 +82,3 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
-
