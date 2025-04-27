@@ -20,12 +20,29 @@ resource "azurerm_resource_group" "rg" {
 # Data source for existing Key Vault
 data "azurerm_key_vault" "existing" {
   name                = var.key_vault_name
-  resource_group_name = var.key_vault_resource_group
+  resource_group_name = var.Anchor_resource
 }
 
 # Data source for existing DNS Zone
 data "azurerm_dns_zone" "existing" {
   name                = var.dns_zone_name
-  resource_group_name = var.dns_zone_resource_group
+  resource_group_name = var.Anchor_resource
+}
+
+resource "azurerm_static_web_app" "Static_web_app" {
+  name = "all-about-eoghan-live"
+  resource_group_name = azurerm_resource_group.rg.name
+  location = azurerm_resource_group.rg.location
+}
+
+module "cosmosdb_deployment" {
+  source = "./Module/CosmosDB"
+  
+}
+
+module "Function_app_deployment" {
+  source = "./Module/FunctionApp"
+
+  
 }
 
